@@ -1,0 +1,40 @@
+name: Build and test
+on:
+  workflow_call:
+    inputs:
+      skipTests:
+        required: false
+        type: boolean
+        default: false
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    container: node:latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+      - name: Install dependencies
+        run: yarn
+      - name: Build
+        run: yarn build
+      - name: Run tests
+        if: inputs.skipTests == false
+        run: yarn test
+      - name: Upload coverage
+        if: inputs.skipTests == false
+        uses: codecov/codecov-action@v3
+        with:
+          fail_ci_if_error: true
+          verbose: true
+      - name: Create build archive
+        run: |
+          mkdir artifacts
+          tar -zcf artifacts/build.tar.gz node_modules dist
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: artifacts
+
+

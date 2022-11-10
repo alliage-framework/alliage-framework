@@ -1,0 +1,28 @@
+name: Release
+on:
+  push:
+    branches:
+      - master
+      - beta
+env:
+  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+jobs:
+  build-and-test:
+    uses: ./.github/workflows/build-and-test.yml
+  release:
+    runs-on: ubuntu-latest
+    needs: ['build-and-test']
+    environment: production
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+      - name: Unzip artifact
+        run: |
+          tar -xf build.tar.gz -C .
+          rm -rf build.tar.gz
+      - name: Publish
+        run: npx semantic-release

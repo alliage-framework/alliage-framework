@@ -1,0 +1,10 @@
+name: Validate branch
+on:
+  push:
+    branches:
+      - '**'
+      - '!master'
+      - '!beta'
+jobs:
+  build-and-test:
+    uses: ./.github/workflows/build-and-test.yml
