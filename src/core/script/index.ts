@@ -16,12 +16,12 @@ export interface ModulesDefinition {
 export abstract class AbstractScript {
   private kernel: Kernel;
 
-  public constructor() {
-    this.kernel = this.loadKernel();
+  public constructor(primitiveContainerData: Record<string, any>) {
+    this.kernel = this.loadKernel(primitiveContainerData);
   }
 
   /* eslint-disable import/no-dynamic-require, global-require */
-  private loadKernel() {
+  private loadKernel(primitiveContainerData: Record<string, any>) {
     const modulesDefinition: ModulesDefinition = require(path.resolve('./alliage-modules.json'));
 
     const modules: ModuleMap = Object.entries(modulesDefinition).reduce((acc, [name, def]) => {
@@ -34,7 +34,7 @@ export abstract class AbstractScript {
         [name]: [module.default ?? module, def.deps, def.envs ?? []],
       };
     }, {});
-    return new Kernel(modules);
+    return new Kernel(modules, primitiveContainerData);
   }
   /* eslint-disable import/no-dynamic-require, global-require */
 
@@ -46,5 +46,5 @@ export abstract class AbstractScript {
 }
 
 export interface ScriptConstructor {
-  new (): AbstractScript;
+  new (primitiveContainerData: Record<string, any>): AbstractScript;
 }

@@ -1,5 +1,4 @@
 import {
-  PrimitiveContainer,
   Arguments,
   INITIALIZATION_CONTEXT,
   CircularReferenceError,
@@ -7,7 +6,11 @@ import {
   AbstractModule,
 } from '../../..';
 
+import { PrimitiveContainer } from '../../primitive-container';
+
 import { Kernel, ModuleMap } from '..';
+
+jest.mock('../../primitive-container');
 
 describe('core/kernel', () => {
   describe('Kernel', () => {
@@ -63,9 +66,17 @@ describe('core/kernel', () => {
       ],
     };
 
+    describe('general', () => {
+      it('should initialize the primitive container with the initial parameters', () => {
+        // eslint-disable-next-line no-new
+        new Kernel(modules, { initial_value: 'test' });
+        expect(PrimitiveContainer).toHaveBeenCalledWith({ initial_value: 'test' });
+      });
+    });
+
     describe('#install', () => {
       it('should call the init and install event handlers in the right order', async () => {
-        const kernel = new Kernel(modules);
+        const kernel = new Kernel(modules, { initial_value: 'test' });
         const args = Arguments.create();
         await kernel.install(args, 'test');
 
@@ -129,7 +140,7 @@ describe('core/kernel', () => {
 
     describe('#build', () => {
       it('should call the init and build event handlers in the right order', async () => {
-        const kernel = new Kernel(modules);
+        const kernel = new Kernel(modules, { initial_value: 'test' });
         const args = Arguments.create();
         await kernel.build(args, 'test');
 
@@ -193,7 +204,7 @@ describe('core/kernel', () => {
 
     describe('#run', () => {
       it('should call the init and build event handlers in the right order', async () => {
-        const kernel = new Kernel(modules);
+        const kernel = new Kernel(modules, { initial_value: 'test' });
         const args = Arguments.create();
         await kernel.run(args, 'test');
 
@@ -286,7 +297,7 @@ describe('core/kernel', () => {
         ],
       };
 
-      const kernel = new Kernel(modulesWithEnvs);
+      const kernel = new Kernel(modulesWithEnvs, { intial_value: 'test' });
       const args = Arguments.create();
 
       await kernel.run(args, 'test');
@@ -305,7 +316,7 @@ describe('core/kernel', () => {
         secondModule: [class SecondModule extends AbstractModule {}, ['firstModule'], []],
       };
 
-      const kernel = new Kernel(modulesWithCircularReference);
+      const kernel = new Kernel(modulesWithCircularReference, { initial_value: 'test' });
       const args = Arguments.create();
 
       let error: Error | null = null;
@@ -346,7 +357,7 @@ describe('core/kernel', () => {
         ],
       };
 
-      const kernel = new Kernel(modulesWithMissingDep);
+      const kernel = new Kernel(modulesWithMissingDep, { initial_value: 'test' });
       const args = Arguments.create();
 
       let error;

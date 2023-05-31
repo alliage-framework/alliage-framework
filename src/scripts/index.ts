@@ -31,7 +31,7 @@ export async function execute() {
 
   const scriptName = args.get('script');
   if (scriptName) {
-    const script = new scripts[scriptName]();
+    const script = new scripts[scriptName]({ is_main_script: true });
     await script.execute(args, args.get('env'));
   }
 }
