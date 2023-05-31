@@ -8,7 +8,7 @@ describe('core/script/build', () => {
     describe('#execute', () => {
       it("should call the 'build' method of the kernel", () => {
         const args = Arguments.create();
-        const buildScript = new BuildScript() as any;
+        const buildScript = new BuildScript({ initial_value: 'test' }) as any;
         buildScript.execute(args, 'test');
 
         expect(buildScript.kernel.build).toHaveBeenCalledWith(args, 'test');

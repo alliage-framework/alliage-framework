@@ -5,8 +5,8 @@ export class PrimitiveContainer {
 
   private container: Map<string, any>;
 
-  public constructor() {
-    this.container = new Map<string, any>();
+  public constructor(data: Record<string, any>) {
+    this.container = new Map<string, any>(Object.entries(data));
     this.isFrozen = false;
   }
 

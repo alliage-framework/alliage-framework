@@ -8,7 +8,7 @@ describe('core/script/run', () => {
     describe('#execute', () => {
       it("should call the 'run' method of the kernel", () => {
         const args = Arguments.create();
-        const runScript = new RunScript() as any;
+        const runScript = new RunScript({ initial_value: 'test' }) as any;
         runScript.execute(args, 'test');
 
         expect(runScript.kernel.build).not.toHaveBeenCalled();

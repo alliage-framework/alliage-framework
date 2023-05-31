@@ -31,7 +31,7 @@ describe('core/script/run', () => {
     describe('#execute', () => {
       it("should call the 'install' method of the kernel", () => {
         const args = Arguments.create();
-        const buildScript = new InstallScript() as any;
+        const buildScript = new InstallScript({ initial_value: 'test' }) as any;
         buildScript.execute(args, 'test');
 
         expect(buildScript.kernel.build).not.toHaveBeenCalled();

@@ -47,15 +47,18 @@ describe('core/script', () => {
         }
       }
 
-      const script = new ConcreteScript();
+      const script = new ConcreteScript({ initial_value: 'test' });
       script.execute();
 
-      expect(Kernel).toHaveBeenCalledWith({
-        module1: [{ name: 'module1' }, ['module2'], ['dev']],
-        module2: [{ name: 'module2' }, ['module3'], []],
-        module3: [{ name: 'module3' }, ['module4'], ['dev', 'production']],
-        module4: [{ name: 'module4' }, [], []],
-      });
+      expect(Kernel).toHaveBeenCalledWith(
+        {
+          module1: [{ name: 'module1' }, ['module2'], ['dev']],
+          module2: [{ name: 'module2' }, ['module3'], []],
+          module3: [{ name: 'module3' }, ['module4'], ['dev', 'production']],
+          module4: [{ name: 'module4' }, [], []],
+        },
+        { initial_value: 'test' },
+      );
       expect(kernelMock).toBeInstanceOf(Kernel);
     });
   });

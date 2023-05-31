@@ -59,9 +59,9 @@ export class Kernel {
 
   private container: PrimitiveContainer;
 
-  public constructor(modules: ModuleMap) {
+  public constructor(modules: ModuleMap, primitiveContainerData: Record<string, any>) {
     this.modules = modules;
-    this.container = new PrimitiveContainer();
+    this.container = new PrimitiveContainer(primitiveContainerData);
   }
 
   /* eslint-disable no-param-reassign, no-await-in-loop */

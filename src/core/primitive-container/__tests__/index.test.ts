@@ -1,9 +1,13 @@
 import { PrimitiveContainer, FrozenContainerError } from '../../..';
 
 describe('core/primitive-container', () => {
-  const pc = new PrimitiveContainer();
+  const pc = new PrimitiveContainer({ initial_value: 'test' });
   const value = { foo: 'bar' };
   describe('#get / #set / #delete', () => {
+    it('should have an initial value', () => {
+      expect(pc.get('initial_value')).toBe('test');
+    });
+
     it('should allow to set a value and to get it', () => {
       pc.set('value', value);
 
